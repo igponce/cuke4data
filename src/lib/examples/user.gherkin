@@ -1,0 +1,9 @@
+# Example Gherkin4Data Transformation
+
+Transformation: "Normalize user records"
+
+Scope: For every user record
+   When Name is not set
+   But uid is set
+   Then set name to uid if not taken
+   Unless uid is already in use
