@@ -1,10 +1,24 @@
 from __future__ import print_function
 import re
 
+# This ruleset has all the magic:
+# it stores both the ruleset and de compiled code that does all the Gherkin magic.
+
+class gherkinRuleset:
+
+    ruleset = None
+    code = None
+
+
+class gherkinRule:
+    ruleType =  None # (when, given, and)
+    connector = None # and, or, and not, except (...)
+
+
 class gherkin:
 
     rule_keywords = ['given', 'since', 'and', 'not', 'but', 'except',
-                     'for each', 'for every', 'every' ]
+                     'for\s*each', 'for\*every', 'every' ]
 
     rule_actions = [ 'then', 'log', 'update', 'trigger', 'discard', 'remove' ]
 
@@ -12,7 +26,7 @@ class gherkin:
         if (debug):
             print("gherkin: __init__ ")
         
-    def parse ( source ):
+    def parse (self, source):
 
         """
         Parse gherkin from source. Source can be *whatever* we need
@@ -30,10 +44,22 @@ class gherkin:
         Then ___________________
         """
 
-        keywords_regexp = "^\s+(" + rule_keywords.join("|") + ")\s(.)"
+        keywords_regexp = "^\s+(" + "|".join(self.rule_keywords) + ")\s(.)"
         print( keywords_regexp )
-
+        
         for lin in source:
 
+            # Clear whitespace and comments
 
-            sp = re.split()
+            lin = lin.lstrip()
+            if lin.startswith('#') :
+               lin = ''
+
+            if lin != '':
+               sp = re.split(keywords_regexp, lin)
+               print("gherkin.parse: {}".format(sp))
+
+
+        if type(source) == file:
+            source.close()
+
