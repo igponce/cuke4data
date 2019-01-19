@@ -60,6 +60,6 @@ class gherkin:
                print("gherkin.parse: {}".format(sp))
 
 
-        if type(source) == file:
+        if type(source).__name__ in ('file','TextOIWrapper'):
             source.close()
 
