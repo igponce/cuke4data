@@ -9,7 +9,7 @@ config = {
   'url': 'https://github.com/igponce/cuke4data',
   'download_url': 'https://github.com/igponce/cuke4data',
   'author_email': 'inigo@syntetic.us',
-  'install_requires': [ ],
+  'install_requires': [ 'nose' ],
   'packages': ['cuke4data'],
   'scripts': [],
   'name': 'cuke4data'
