@@ -12,6 +12,8 @@ def test_parseGherkinFromFile():
   source = open("tests/simple.gherkin", 'r')
   gk = gkparser.gherkin()
   gk.parse(source) 
+  print("--")
+  assert(1 == 2)
 
 def test_parseGherkinFromFile123():
   return True

@@ -17,6 +17,9 @@ class gherkinRule:
 
 class gherkin:
 
+    scenario_keywords = ['scenario', 'golden', 'golden record', 
+                         'transform', 'transformation' ]
+
     rule_keywords = ['given', 'since', 'and', 'not', 'but', 'except',
                      'for\s*each', 'for\*every', 'every' ]
 
@@ -37,7 +40,7 @@ class gherkin:
 
         Semi-BNF for the Gherkin-data language is:
 
-        Scenario|Thansformation "______":
+        Scenario|Transfor(mation)|Golden Record: "__name__":
 
         ^Given|When|^_____ .....
         ^And^Or^Not ____________
@@ -45,7 +48,11 @@ class gherkin:
         """
 
         keywords_regexp = "^\s+(" + "|".join(self.rule_keywords) + ")\s(.)"
-        print( keywords_regexp )
+        scenario_regexp = "^\s+(" + "|".join(self.scenario_keywords) + ")\s(.)"
+        print( keywords_regexp ); print (scenario_regexp)
+
+        scenario = []
+        curr_scenario = []
         
         for lin in source:
 
@@ -56,8 +63,15 @@ class gherkin:
                lin = ''
 
             if lin != '':
-               sp = re.split(keywords_regexp, lin)
-               print("gherkin.parse: {}".format(sp))
+                # Check scenarios first, then rules
+                sp = lin.split(':') # re.split(scenario_regexp, lin)
+                if len(sp) > 1 :
+                   
+                   sp = re.match(sp[0]): 
+                   print("gherkin.parse - scenarios: {}".format(sp))
+                else :
+                   sp = re.split(keywords_regexp, lin)
+                   print("gherkin.parse: {}".format(sp))
 
 
         if type(source).__name__ in ('file','TextOIWrapper'):
