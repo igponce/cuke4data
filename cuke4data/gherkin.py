@@ -66,8 +66,7 @@ class gherkin:
                 # Check scenarios first, then rules
                 sp = lin.split(':') # re.split(scenario_regexp, lin)
                 if len(sp) > 1 :
-                   
-                   sp = re.match(sp[0]): 
+                   sp = re.match(sp[0]) 
                    print("gherkin.parse - scenarios: {}".format(sp))
                 else :
                    sp = re.split(keywords_regexp, lin)
