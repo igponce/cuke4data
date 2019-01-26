@@ -6,4 +6,5 @@ Scope: For every user record
    When Name is not set
    But uid is set
    Then set name to uid if not taken
+   NotATest will not match any kind of rule and will be ignored or raise an error (configurable)
    Unless uid is already in use
