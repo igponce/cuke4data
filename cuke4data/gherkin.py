@@ -20,8 +20,8 @@ class gherkin:
     scenario_keywords = ['scenario', 'golden', 'golden record', 
                          'transform', 'transformation' ]
 
-    rule_keywords = ['given', 'since', 'and', 'not', 'but', 'except',
-                     'for\s*each', 'for\*every', 'every', 'when', 'and', 'or', 'not', 'but' ]
+    rule_keywords = ['when','given', 'since', 'and', 'not', 'but', 'except',
+                     'for\s*each', 'for\s*every', 'every', 'and', 'or', 'not', 'but' ]
 
     rule_actions = [ 'then', 'log', 'update', 'trigger', 'discard', 'remove' ]
 
@@ -47,7 +47,7 @@ class gherkin:
         Then ___________________
         """
 
-        keywords_regexp = "^\s*(" + "|".join(self.rule_keywords) + ")"
+        keywords_regexp = "^\s*(" + "|".join(self.rule_keywords) + "|".join(self.rule_actions) + ")"
         scenario_regexp = "^\s*(" + "|".join(self.scenario_keywords) + ")"
         print( keywords_regexp ); print (scenario_regexp)
 
@@ -64,7 +64,7 @@ class gherkin:
 
             if lin != '':
                 # Check scenarios first, then rules
-                sp = lin.split(':') # re.split(scenario_regexp, lin)
+                sp = lin.split(':') 
 
                 if len(sp) > 1 :
                    # Should be a 'Scenario: name' statement
@@ -74,13 +74,12 @@ class gherkin:
                        print ("UNKNOWN Scenario type detected: {} - Ignoring?".format(sp[0]))
                 else:
                    # Whitespace or rule
-                   sp = re.split(keywords_regexp, lin, re.IGNORECASE)
-                   print("   sp = {} ({})".format(len(sp),sp))
-                   if len(sp) > 1 :
-                      print("gherkin.parse: - Detected Rule {}".format(sp) )
+                   ruleline = re.split(keywords_regexp, lin, 0, re.IGNORECASE)
+                   if len(ruleline) > 1 :
+                      print(ruleline); # gherkin.parse: - Detected Rule {}".format(sp) )
                    else:
-                      print("gherkin_parse: - notArule {}".format(sp)) 
+                      print("gherkin_parse: - notArule {}".format(ruleline)) 
 
-        if type(source).__name__ in ('file','TextOIWrapper'):
-            source.close()
+        #if type(source).__name__ in ('file','TextOIWrapper'):
+        #    source.close()
 
