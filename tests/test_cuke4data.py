@@ -11,7 +11,8 @@ def test_parseGherkinFromFile():
   gk = gkparser.gherkin()
   gk.parse(source) 
   print("--")
-  # assert(1 == 2)
+  
+  # Todo: Dump scenarios
 
 def test_parseGherkinFromString():
   source = """
@@ -25,7 +26,7 @@ def test_parseGherkinFromString():
   gk = gkparser.gherkin()
   gk.parse(source)
 
-
+  # Todo: Dump scenarios
 
   return True
 
