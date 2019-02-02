@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 from __future__ import print_function
 
-# import unittest
-
 from cuke4data import gherkin as gkparser
 
 def test_canLoadLibrary():
@@ -15,7 +13,20 @@ def test_parseGherkinFromFile():
   print("--")
   # assert(1 == 2)
 
-def test_parseGherkinFromFile123():
+def test_parseGherkinFromString():
+  source = """
+     Scenario: Test scenario for gherkin
+
+     When I read this content from a string
+     And I am not reading from a file
+     Then I should be able to parse the file
+     """
+  
+  gk = gkparser.gherkin()
+  gk.parse(source)
+
+
+
   return True
 
 def test_createGherkinScenario():
