@@ -4,15 +4,26 @@ import re
 # This ruleset has all the magic:
 # it stores both the ruleset and de compiled code that does all the Gherkin magic.
 
-class gherkinRuleset:
+class gherkinScenario:
 
+    name = None
     ruleset = None
     code = None
 
+    def __init__ (self, name = 'Sample Scenario'):
+        self.name = name
+        ruleset = None
+        code = None
+     
 
 class gherkinRule:
     ruleType =  None # (when, given, and)
     connector = None # and, or, and not, except (...)
+    text = None
+
+    def __init__ (self, text=None) :
+        self.text = text
+        
 
 
 class gherkin:
@@ -24,6 +35,7 @@ class gherkin:
                      'for\s*each', 'for\s*every', 'every', 'and', 'or', 'not', 'but' ]
 
     rule_actions = [ 'then', 'log', 'update', 'trigger', 'discard', 'remove' ]
+
 
     def __init__(self, debug = True):
         if (debug):
