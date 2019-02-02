@@ -13,7 +13,14 @@ def test_parseGherkinFromFile():
   gk = gkparser.gherkin()
   gk.parse(source) 
   print("--")
-  assert(1 == 2)
+  # assert(1 == 2)
 
 def test_parseGherkinFromFile123():
   return True
+
+def test_createGherkinScenario():
+
+  scenarioName = 'Scenario name - string 123'
+  sc = gkparser.gherkinScenario(scenarioName)
+
+  assert sc.name == scenarioName
