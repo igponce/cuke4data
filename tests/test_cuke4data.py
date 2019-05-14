@@ -36,9 +36,12 @@ def test_createGherkinScenario():
   sc = gkparser.gherkinScenario(scenarioName)
 
   assert sc.name == scenarioName
+<<<<<<< HEAD
 
 def test_createGherkinRule():
   ruleText = "Given I have a rule text like this one"
   rr = gkparser.gherkinRule(ruleText)
 
   assert rr.text == ruleText
+=======
+>>>>>>> master
