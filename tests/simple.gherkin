@@ -3,7 +3,17 @@
 Transformation: "Normalize user records"
 
 Scope: For every user record
-   When Name is not set
-   But uid is set
-   Then set name to uid if not taken
-   Unless uid is already in use
+   Given a record
+   Since this is a processing language
+   And all suff we make here is
+   Not just for checking data
+   But also for data manipulation
+   Except when it does not make sense
+   For each rule we define we'll run a match
+   For every rule defined in data_rules.py
+   Every record will be be matched against data_rules
+   When we have a match
+   And there is more than rule that applies to a data portion, we'll
+   Not just blindly overwrite the data more than once
+   But we will sort the rules by priority
+   ____until___ all data is filtered and have a golden record.

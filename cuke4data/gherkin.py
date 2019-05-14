@@ -4,15 +4,26 @@ import re
 # This ruleset has all the magic:
 # it stores both the ruleset and de compiled code that does all the Gherkin magic.
 
-class gherkinRuleset:
+class gherkinScenario:
 
+    name = None
     ruleset = None
     code = None
 
+    def __init__ (self, name = 'Sample Scenario'):
+        self.name = name
+        ruleset = None
+        code = None
+     
 
 class gherkinRule:
     ruleType =  None # (when, given, and)
     connector = None # and, or, and not, except (...)
+    text = None
+
+    def __init__ (self, text=None) :
+        self.text = text
+        
 
 
 class gherkin:
@@ -20,10 +31,11 @@ class gherkin:
     scenario_keywords = ['scenario', 'golden', 'golden record', 
                          'transform', 'transformation' ]
 
-    rule_keywords = ['given', 'since', 'and', 'not', 'but', 'except',
-                     'for\s*each', 'for\*every', 'every' ]
+    rule_keywords = ['when','given', 'since', 'and', 'not', 'but', 'except',
+                     'for\s*each', 'for\s*every', 'every', 'and', 'or', 'not', 'but' ]
 
     rule_actions = [ 'then', 'log', 'update', 'trigger', 'discard', 'remove' ]
+
 
     def __init__(self, debug = True):
         if (debug):
@@ -47,8 +59,8 @@ class gherkin:
         Then ___________________
         """
 
-        keywords_regexp = "^\s+(" + "|".join(self.rule_keywords) + ")\s(.)"
-        scenario_regexp = "^\s+(" + "|".join(self.scenario_keywords) + ")\s(.)"
+        keywords_regexp = "^\s*(" + "|".join(self.rule_keywords) + "|".join(self.rule_actions) + ")"
+        scenario_regexp = "^\s*(" + "|".join(self.scenario_keywords) + ")"
         print( keywords_regexp ); print (scenario_regexp)
 
         scenario = []
@@ -64,15 +76,22 @@ class gherkin:
 
             if lin != '':
                 # Check scenarios first, then rules
-                sp = lin.split(':') # re.split(scenario_regexp, lin)
+                sp = lin.split(':') 
+
                 if len(sp) > 1 :
-                   sp = re.match(sp[0]) 
-                   print("gherkin.parse - scenarios: {}".format(sp))
-                else :
-                   sp = re.split(keywords_regexp, lin)
-                   print("gherkin.parse: {}".format(sp))
+                   # Should be a 'Scenario: name' statement
+                   if ( re.match(scenario_regexp, sp[0], re.IGNORECASE ) != None ) :
+                       print("Scenario DETECTED: {}\n\tScenario_name: {}".format(sp[0],sp[1]))
+                   else :
+                       print ("UNKNOWN Scenario type detected: {} - Ignoring?".format(sp[0]))
+                else:
+                   # Whitespace or rule
+                   ruleline = re.split(keywords_regexp, lin, 0, re.IGNORECASE)
+                   if len(ruleline) > 1 :
+                      print(ruleline); # gherkin.parse: - Detected Rule {}".format(sp) )
+                   else:
+                      print("gherkin_parse: - notArule {}".format(ruleline)) 
 
-
-        if type(source).__name__ in ('file','TextOIWrapper'):
-            source.close()
+        #if type(source).__name__ in ('file','TextOIWrapper'):
+        #    source.close()
 
