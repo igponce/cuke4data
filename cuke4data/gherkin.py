@@ -32,7 +32,7 @@ class gherkin:
                          'transform', 'transformation' ]
 
     rule_keywords = ['when','given', 'since', 'and', 'not', 'but', 'except',
-                     'for\s*each', 'for\s*every', 'every', 'and', 'or', 'not', 'but' ]
+                     r'for\s*each', r'for\s*every', 'every', 'and', 'or', 'not', 'but' ]
 
     rule_actions = [ 'then', 'log', 'update', 'trigger', 'discard', 'remove' ]
 
@@ -59,8 +59,8 @@ class gherkin:
         Then ___________________
         """
 
-        keywords_regexp = "^\s*(" + "|".join(self.rule_keywords) + "|".join(self.rule_actions) + ")"
-        scenario_regexp = "^\s*(" + "|".join(self.scenario_keywords) + ")"
+        keywords_regexp = r"^\s*(" + "|".join(self.rule_keywords) + "|".join(self.rule_actions) + ")"
+        scenario_regexp = r"^\s*(" + "|".join(self.scenario_keywords) + ")"
         print( keywords_regexp ); print (scenario_regexp)
 
         scenario = []
