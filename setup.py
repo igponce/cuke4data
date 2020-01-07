@@ -9,7 +9,7 @@ config = {
   'url': 'https://github.com/igponce/cuke4data',
   'download_url': 'https://github.com/igponce/cuke4data',
   'author_email': 'inigo@syntetic.us',
-  'install_requires': [ 'pytest' ],
+  'install_requires': [ 'pytest', 'sqlalchemy' ],
   'packages': ['cuke4data'],
   'scripts': [],
   'name': 'cuke4data'
