@@ -1,6 +1,9 @@
-# Kuke4Data
+# Cuke4Data
+## Gherkin (cucumber) language for data
 
-Gherkin (cucumber) language for data
+![](https://github.com/igponce/cuke4data/workflows/Tests/badge.svg)
+
+
 This project contains PoC for using the gherkin language as a cucumber-like
 way to do data manipulation (not just software testing like cucumber does).
 
