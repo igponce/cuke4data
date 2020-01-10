@@ -32,7 +32,7 @@ class gherkin:
                          'transform', 'transformation' ]
 
     rule_keywords = ['when','given', 'since', 'and', 'not', 'but', 'except',
-                     'for\s*each', 'for\s*every', 'every', 'and', 'or', 'not', 'but' ]
+                     r'for\s*each', r'for\s*every', 'every', 'and', 'or', 'not', 'but' ]
 
     rule_actions = [ 'then', 'log', 'update', 'trigger', 'discard', 'remove' ]
 
