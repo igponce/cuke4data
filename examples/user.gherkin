@@ -1,6 +1,6 @@
 # Example Gherkin4Data Transformation
 
-Transformation: "Normalize user records"
+Scenario: "Normalize user records"
 
 Scope: For every user record
    When Name is not set
