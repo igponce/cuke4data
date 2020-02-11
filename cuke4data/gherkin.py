@@ -14,8 +14,11 @@ class gherkinScenario:
 
     def __init__(self, name='Sample Scenario'):
         self.scenario_name = name
-        ruleset = []
-        code = []
+        self.ruleset = []
+        self.code = []
+
+    def add_rule(self, gkrule):
+        self.ruleset.append(gkrule)
 
 
 class gherkinRule:
@@ -62,8 +65,6 @@ class gherkin:
     """
     def parse(self, source):
         def iterate_lines(ii):
-            print("iterate_lines: type={}".format(type(ii)))
-
             if type(ii) == str:
                 return ii.splitlines()
             elif type(ii) == io.TextIOWrapper:
@@ -85,22 +86,23 @@ class gherkin:
                 lin = ''
 
             if lin != '':
-                # Check scenarios first, then rules
-                print("Not whitespace line 80: {}".format(lin))
                 sp = lin.split(':')
+                # Check scenarios first, then rules
 
                 if len(sp) > 1:
                     # Should be a 'Scenario: name' statement
                     if re.match(scenario_regexp, sp[0], re.IGNORECASE) is not None:
                         scenario = gherkinScenario(sp[1])
-
                     else:
                         print("UNKNOWN Scenario type detected: {} - Ignoring?".format(sp[0]))
                 else:
                     # Whitespace or rule
-                    ruleline = re.split(keywords_regexp, lin, 0, re.IGNORECASE)
+                    ruleline = re.split(keywords_regexp, lin, 1, re.IGNORECASE)
                     if len(ruleline) > 1:
-                        print(ruleline)  # gherkin.parse: - Detected Rule {}".format(sp) )p
+                        # ruleline[0] - is empty
+                        # ruleline[1] - the rule joint (when, and, etc..)
+                        # ruleline[2] - rule text
+                        scenario.add_rule(gherkinRule(text=ruleline[2], connector=ruleline[1]))
                     else:
                         print("gherkin_parse: - notArule {}".format(ruleline))
 
