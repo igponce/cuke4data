@@ -19,15 +19,24 @@ from __future__ import print_function
 from cuke4data import gherkin as gkparser
 
 
-def test_canLoadLibrary():
-    return True
 
+def test_createGherkinScenario():
+    scenarioName = 'Scenario name - string 123'
+    sc = gkparser.gherkinScenario(scenarioName)
+    assert sc.name == scenarioName
+
+
+def test_createGherkinRule():
+    ruleText = "Given I have a rule text like this one"
+    rr = gkparser.gherkinRule(ruleText)
+    assert rr.text == ruleText
 
 def test_parseGherkinFromFile():
     source = open("tests/simple.gherkin", 'r')
     gk = gkparser.gherkin()
     gk.parse(source)
     print("--")
+    assert gk.scenarios[0].name == '"Prose to normalize user records"'
 
 
 def test_parseGherkinFromString():
@@ -41,16 +50,12 @@ def test_parseGherkinFromString():
     gk = gkparser.gherkin()
     gk.parse(source)
     # Todo: Dump scenarios
-    return True
+    assert gk.scenarios[0].name == "Test scenario for gherkin"
 
 
-def test_createGherkinScenario():
-    scenarioName = 'Scenario name - string 123'
-    sc = gkparser.gherkinScenario(scenarioName)
-    assert sc.name == scenarioName
+def test_unnamed_scenario():
+    ruleTest = "Given I have a rule like this\n" "And something happens\n" "Then do action\n"
 
-
-def test_createGherkinRule():
-    ruleText = "Given I have a rule text like this one"
-    rr = gkparser.gherkinRule(ruleText)
-    assert rr.text == ruleText
+    gk= gkparser.gherkin()
+    gk.parse(ruleTest)
+    assert gk.scenarios[0].name == "No name"

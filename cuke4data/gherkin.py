@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #    Copyright 2020 Iñigo Gonzalez Ponce
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,18 +28,31 @@ class gherkinScenario:
     code = None
 
     def __init__(self, name='Sample Scenario'):
-        self.name = name
+        self.name = name.strip()
         ruleset = None
         code = None
 
 
 class gherkinRule:
-    ruleType = None  # (when, given, and)
-    connector = None  # and, or, and not, except (...)
-    text = None
 
     def __init__(self, text=None):
+        self.ruleType = None  # (when, given, and)
+        self.connector = None  # and, or, and not, except (...)
+        self.action = None
         self.text = text
+
+
+    def match(self,text):
+        """
+        Check if this text matches a rule to  be excecuted
+        """
+        return False
+
+    def exec(self,code):
+        """
+        Execute piece of code if rule matches.
+        """
+        return False
 
 
 class gherkin:
@@ -56,6 +70,7 @@ class gherkin:
     def __init__(self, debug=True):
         if (debug):
             print("gherkin: __init__ ")
+            self.scenarios = []
 
     """
     Parse gherkin from source. Source can be *whatever* we need
@@ -74,6 +89,7 @@ class gherkin:
     """
     def parse(self, source):
 
+
         keywords_regexp = r"^\s*(" + "|".join(self.rule_keywords) + \
                           "|".join(self.rule_actions) + ")"
         scenario_regexp = r"^\s*(" + "|".join(self.scenario_keywords) + ")"
@@ -82,7 +98,12 @@ class gherkin:
 
         scenario = []
         curr_scenario = []
-        
+
+        # Adapt input
+
+        if source.__class__ is str:
+            source = source.splitlines()
+       
         for lin in source:
             # Clear whitespace and comments
             lin = lin.lstrip()
@@ -92,11 +113,13 @@ class gherkin:
             if lin != '':
                 # Check scenarios first, then rules
                 sp = lin.split(':')
+                print(lin)
 
                 if len(sp) > 1:
                     # Should be a 'Scenario: name' statement
                     if re.match(scenario_regexp, sp[0], re.IGNORECASE) is not None:
                         print("Scenario DETECTED: {}\n\tScenario_name: {}".format(sp[0], sp[1]))
+                        scenario.append(gherkinScenario(sp[1])) 
                     else:
                         print("UNKNOWN Scenario type detected: {} - Ignoring?".format(sp[0]))
                 else:
@@ -106,6 +129,11 @@ class gherkin:
                         print(ruleline)  # gherkin.parse: - Detected Rule {}".format(sp) )
                     else:
                         print("gherkin_parse: - notArule {}".format(ruleline))
+
+        if scenario != []:
+            self.scenarios = scenario
+        else:
+            self.scenarios = [ gherkinScenario('No name')]
 
         # if type(source).__name__ in ('file','TextOIWrapper'):
         #     source.close()
