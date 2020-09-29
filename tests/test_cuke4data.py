@@ -17,6 +17,7 @@
 
 from __future__ import print_function
 from cuke4data import gherkin as gkparser
+import pdb
 
 
 
@@ -24,7 +25,6 @@ def test_createGherkinScenario():
     scenarioName = 'Scenario name - string 123'
     sc = gkparser.gherkinScenario(scenarioName)
     assert sc.name == scenarioName
-
 
 def test_createGherkinRule():
     ruleText = "Given I have a rule text like this one"
@@ -38,8 +38,7 @@ def test_parseGherkinFromFile():
     print("--")
     assert gk.scenarios[0].name == '"Prose to normalize user records"'
 
-
-def test_parseGherkinFromString():
+def test_parse_ScenarioName_with_GherkinFromString():
     source = """
         Scenario: Test scenario for gherkin
 
@@ -47,10 +46,12 @@ def test_parseGherkinFromString():
         And I am not reading from a file
         Then I should be able to parse the file
         """
+   
     gk = gkparser.gherkin()
     gk.parse(source)
     # Todo: Dump scenarios
     assert gk.scenarios[0].name == "Test scenario for gherkin"
+    assert gk.scenarios[0].rules == []
 
 
 def test_unnamed_scenario():

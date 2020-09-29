@@ -23,24 +23,22 @@ import re
 
 class gherkinScenario:
 
-    name = None
-    ruleset = None
-    code = None
-
     def __init__(self, name='Sample Scenario'):
         self.name = name.strip()
-        ruleset = None
-        code = None
+        self.rules = []
+        self.code = None
+
+    def __str__(self):
+       return self.name
 
 
 class gherkinRule:
 
-    def __init__(self, text=None):
-        self.ruleType = None  # (when, given, and)
-        self.connector = None  # and, or, and not, except (...)
+    def __init__(self, text=None, conjunction=None):
+        self.ruleType = None  # (when, given, and) - should have for each - for every
+        self.connector = conjunction  # and, or, and not, except (...)
         self.action = None
         self.text = text
-
 
     def match(self,text):
         """
@@ -90,7 +88,7 @@ class gherkin:
     def parse(self, source):
 
 
-        keywords_regexp = r"^\s*(" + "|".join(self.rule_keywords) + \
+        keywords_regexp = r"(?!=^\s*)   (" + "|".join(self.rule_keywords) + \
                           "|".join(self.rule_actions) + ")"
         scenario_regexp = r"^\s*(" + "|".join(self.scenario_keywords) + ")"
         print(keywords_regexp)
@@ -118,20 +116,29 @@ class gherkin:
                 if len(sp) > 1:
                     # Should be a 'Scenario: name' statement
                     if re.match(scenario_regexp, sp[0], re.IGNORECASE) is not None:
-                        print("Scenario DETECTED: {}\n\tScenario_name: {}".format(sp[0], sp[1]))
-                        scenario.append(gherkinScenario(sp[1])) 
+                        print("Scenario DETECTED: keyword={}\n\tScenario_name: {}".format(sp[0], sp[1]))
+                        scenario = gherkinScenario(sp[1])
                     else:
                         print("UNKNOWN Scenario type detected: {} - Ignoring?".format(sp[0]))
                 else:
                     # Whitespace or rule
                     ruleline = re.split(keywords_regexp, lin, 0, re.IGNORECASE)
                     if len(ruleline) > 1:
-                        print(ruleline)  # gherkin.parse: - Detected Rule {}".format(sp) )
+                        print(f'RULE =>{ruleline}<==')  # gherkin.parse: - Detected Rule {}".format(sp) )
+                        _, conjunction, phrase = ruleline
+                        this_rule = gherkinRule(text=phrase, conjunction=conjunction)
+                        self.scenarios[-1].rules.append(this_rule)
+
                     else:
                         print("gherkin_parse: - notArule {}".format(ruleline))
 
         if scenario != []:
-            self.scenarios = scenario
+            # Scenario detected
+            if self.scenarios == None:
+               self.scenarios = [scenario]
+            else:
+               self.scenarios += [scenario]
+            # No scenario detected. Create dummy one
         else:
             self.scenarios = [ gherkinScenario('No name')]
 
