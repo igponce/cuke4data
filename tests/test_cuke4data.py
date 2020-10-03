@@ -76,12 +76,13 @@ class Gherkin_Interface_Tests(unittest.TestCase):
         gk= gkparser.gherkin()
         gk.parse(ruleTest)
         assert gk.scenarios[0].name == "No name"
+        assert len(gk.scenarios[0].rules) == 3
 
     def test_number_of_rules(self):
         ruleTest = "Given I have a rule like this\n" "And something happens\n" "Then do action\n"
         gk= gkparser.gherkin()
         gk.parse(ruleTest)
-        assert len(gk.scenarios[0].rules)== 12123123
+        assert len(gk.scenarios[0].rules)== 3
 
 # unittest boilerplate 
 if __name__ == "__main__":
