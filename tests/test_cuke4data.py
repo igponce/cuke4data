@@ -97,9 +97,9 @@ class Gherkin_Parse_Tests(unittest.TestCase):
           """
         gk= gkparser.gherkin()
         gk.parse(ruleTest)
-        assert len(gk.scenarios) is 2
-        gk.scenarios[0].name is 'First scenario'
-        gk.scenarios[1].name is 'Second scenario'
+        assert len(gk.scenarios) == 2
+        gk.scenarios[0].name == 'First scenario'
+        gk.scenarios[1].name == 'Second scenario'
 
 
 # unittest boilerplate 
