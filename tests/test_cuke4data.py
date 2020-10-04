@@ -19,17 +19,6 @@ import unittest
 import pytest
 from cuke4data import gherkin as gkparser
 
-@pytest.fixture
-def fixture_unnamedGherkinScenario(fixture):
-    scenario_to_test = """
-        Given I have a rule like this\n"
-        And something happens\n"
-        Then do action
-    """
-    gk = gkparser.gherkin()
-    gk.parse(scenario_to_test)
-    return gk
-
 class Gherkin_Class_Tests(unittest.TestCase):
     """
     Testcases por individual components (classes).
@@ -46,13 +35,12 @@ class Gherkin_Class_Tests(unittest.TestCase):
         assert rr.text == ruleText
 
 
-class Gherkin_Interface_Tests(unittest.TestCase):
+class Gherkin_Parse_Tests(unittest.TestCase):
 
-    def test_parseGherkinFromFile(self):
+    def test_parse_fromFile(self):
         source = open("tests/simple.gherkin", 'r')
         gk = gkparser.gherkin()
         gk.parse(source)
-        print("--")
         assert gk.scenarios[0].name == '"Prose to normalize user records"'
 
     def test_parse_ScenarioName_with_GherkinFromString(self):
@@ -68,21 +56,51 @@ class Gherkin_Interface_Tests(unittest.TestCase):
         gk.parse(source)
         # Todo: Dump scenarios
         assert gk.scenarios[0].name == "Test scenario for gherkin"
-        assert gk.scenarios[0].rules == []
+        assert len(gk.scenarios[0].rules) == 3
 
-    def test_unnamed_scenario(self):
+    def test_parse_invalid_actions(self):
+        source = """
+           Scenario: Test with invelid rule verbs at the beginning
+           __When I have a test with invalid verbs
+           Then the rule should not be parsed
+           and I should raise an exception
+           """
+
+        with pytest.raises(RuntimeWarning):
+            gk = gkparser.gherkin()
+            gk.parse(source)
+
+
+    def test_parse_unnamed_scenario(self):
         ruleTest = "Given I have a rule like this\n" "And something happens\n" "Then do action\n"
 
         gk= gkparser.gherkin()
         gk.parse(ruleTest)
         assert gk.scenarios[0].name == "No name"
-        assert len(gk.scenarios[0].rules) == 3
 
-    def test_number_of_rules(self):
+    def test_parse_number_of_rules(self):
         ruleTest = "Given I have a rule like this\n" "And something happens\n" "Then do action\n"
         gk= gkparser.gherkin()
         gk.parse(ruleTest)
         assert len(gk.scenarios[0].rules)== 3
+        
+    def test_parse_discard_empty_scenario(self):
+        ruleTest = """
+          Scenario: First scenario
+             Given I have a non-empty scenario here
+             Then this scenario should be seen in the results.
+          Scenario: Empty scenario should not be seen
+          Scenario: Second scenario
+             Given I have a second scenario after an empty one
+             Then this scenario must be in the results
+             But the empty one will not be there.
+          """
+        gk= gkparser.gherkin()
+        gk.parse(ruleTest)
+        assert len(gk.scenarios) is 2
+        gk.scenarios[0].name is 'First scenario'
+        gk.scenarios[1].name is 'Second scenario'
+
 
 # unittest boilerplate 
 if __name__ == "__main__":

@@ -91,7 +91,7 @@ class gherkin:
     def parse(self, source):
 
 
-        keywords_regexp = r"(?!=^\s*)(" + "|".join(self.rule_keywords + self.rule_actions) + ")"
+        keywords_regexp = r"^\s*(" + "|".join(self.rule_keywords + self.rule_actions) + ")"
         scenario_regexp = r"^\s*(" + "|".join(self.scenario_keywords) + ")"
         print(keywords_regexp)
         print (scenario_regexp)
@@ -115,6 +115,7 @@ class gherkin:
                 print(lin)
 
                 if len(sp) > 1:
+                    print(curr_scenario.name)
                     # Should be a 'Scenario: name' statement
                     if re.match(scenario_regexp, sp[0], re.IGNORECASE) is not None:
                         print("Scenario DETECTED: keyword={}\n\tScenario_name: {}".format(sp[0], sp[1]))
@@ -123,8 +124,6 @@ class gherkin:
                         # Do we have already an scenario _with_ rules?
                         if curr_scenario.rules:
                             self.scenarios.append(curr_scenario)
-                            curr_scenario = new_scenario
-
                         else:
                             """ Empty scenario detected 
                                 Scenario: blah blah blah <-- this one
@@ -134,6 +133,8 @@ class gherkin:
                             """
                             print("EMPTY Scenario detected")
 
+                        curr_scenario = new_scenario
+
                     else:
                         print("UNKNOWN Scenario type detected: {} - Ignoring?".format(sp[0]))
                 else:
@@ -141,14 +142,18 @@ class gherkin:
                     ruleline = re.split(keywords_regexp, lin, 0, re.IGNORECASE)
                     if len(ruleline) > 1:
                         print(f'RULE =>{ruleline}<==')  # gherkin.parse: - Detected Rule {}".format(sp) )
-                        _, conjunction, phrase = ruleline
+                        conjunction, phrase = ruleline[1], ruleline[2]
                         this_rule = gherkinRule(text=phrase, conjunction=conjunction)
                         curr_scenario.add_rule(this_rule)
 
                     else:
-                        print("gherkin_parse: - notArule {}".format(ruleline))
+                        errmsg = 'Expected scenario, rule, comment, or empty line'
+                        displaymsg = f'{lin}\n^^^{errmsg}'
+                        print(displaymsg)
+                        raise RuntimeWarning(errmsg)
 
         self.scenarios.append(curr_scenario)
+
 
         # if curr_scenario.is_empty():
         #     # Scenario detected
