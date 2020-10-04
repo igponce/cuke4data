@@ -1,3 +1,6 @@
 *.vscode
 *.pyc
 *.swp
+.cache
+.pytest_cache
+.vscode
