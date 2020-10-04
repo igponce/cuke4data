@@ -32,4 +32,4 @@ Scope: For every user record
    And there is more than rule that applies to a data portion, we'll
    Not just blindly overwrite the data more than once
    But we will sort the rules by priority
-   ____until___ all data is filtered and have a golden record.
+   And all data is filtered and have a golden record.
