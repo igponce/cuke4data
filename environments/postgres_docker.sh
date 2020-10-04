@@ -15,7 +15,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# run_tests
 
+# Launch postgres via docker
+# Hardcoded (default) credentials are:
 
-PYTHONPATH="../src/lib/" python $* gherkin_tests.py
+# See docker configuration on: https://hub.docker.com/_/postgres
+
+# Postgres root user
+POSTGRES_USER='cukeuser'
+
+# Postgres root passwd
+POSTGRES_PASSWORD='cuke4data'
+
+# Database name
+POSGRES_DB='cukedb'
+
+# Where to place postgres files (/tmp since this is for a test)
+PGDATA='/tmp/pgdata'
+
+docker run --name 'Postgres-cuke4data' \
+   --rm \
+   -e POSTGRES_USER=$POSTGRES_USER \
+   -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD \
+   -e POSTGRES_DB=$POSTGRES_DB \
+   -e PGDATA=$PGDATA \
+   -d postgres:12.3     

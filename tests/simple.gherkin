@@ -1,6 +1,22 @@
+
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # Example Gherkin4Data Transformation
 
-Transformation: "Normalize user records"
+Transformation: "Prose to normalize user records"
 
 Scope: For every user record
    Given a record
@@ -16,4 +32,4 @@ Scope: For every user record
    And there is more than rule that applies to a data portion, we'll
    Not just blindly overwrite the data more than once
    But we will sort the rules by priority
-   ____until___ all data is filtered and have a golden record.
+   And all data is filtered and have a golden record.

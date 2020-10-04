@@ -1,5 +1,3 @@
-#!/bin/bash
-#
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
 # this work for additional information regarding copyright ownership.
@@ -15,7 +13,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# run_tests
+# Example Gherkin4Data Data Quality
+
+Transformation: "Data Quality Example"
+
+Scope: Invalid user
+   Given a user record
+   When the user has no email address
+   Or the user has no telephone
+   Then Reject the record
+
+Scope: Check transactions are made by active users
+   Given a purchase record
+   When the transaction date is not older than 3 months
+   And the user last login
 
 
-PYTHONPATH="../src/lib/" python $* gherkin_tests.py
+   Then the user that made the transactionis in the transaction
+   Then mark the user as active
