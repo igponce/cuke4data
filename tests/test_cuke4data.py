@@ -65,11 +65,9 @@ class Gherkin_Parse_Tests(unittest.TestCase):
            Then the rule should not be parsed
            and I should raise an exception
            """
-
         with pytest.raises(RuntimeWarning):
             gk = gkparser.gherkin()
             gk.parse(source)
-
 
     def test_parse_unnamed_scenario(self):
         ruleTest = "Given I have a rule like this\n" "And something happens\n" "Then do action\n"

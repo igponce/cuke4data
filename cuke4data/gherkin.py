@@ -14,11 +14,10 @@
 #    limitations under the License.
 
 import re
-
+import io
 # This ruleset has all the magic:
 # it stores both the ruleset and de compiled code
 # that does all the Gherkin magic.
-
 
 class gherkinRule:
 
@@ -27,7 +26,6 @@ class gherkinRule:
         self.connector = conjunction  # and, or, and not, except (...)
         self.action = None
         self.text = text
-
     def __repr__(self):
         return f'{__class__}: {self.text}'
 
@@ -90,7 +88,6 @@ class gherkin:
     """
     def parse(self, source):
 
-
         keywords_regexp = r"^\s*(" + "|".join(self.rule_keywords + self.rule_actions) + ")"
         scenario_regexp = r"^\s*(" + "|".join(self.scenario_keywords) + ")"
         print(keywords_regexp)
@@ -110,6 +107,7 @@ class gherkin:
                 lin = ''
 
             if lin != '':
+                sp = lin.split(':')
                 # Check scenarios first, then rules
                 sp = lin.split(':')
                 print(lin)
@@ -154,16 +152,3 @@ class gherkin:
 
         self.scenarios.append(curr_scenario)
 
-
-        # if curr_scenario.is_empty():
-        #     # Scenario detected
-        #     if self.scenarios == None:
-        #        self.scenarios = [scenario]
-        #     else:
-        #        self.scenarios += [scenario]
-        #     # No scenario detected. Create dummy one
-        # else:
-        #     self.scenarios = [ gherkinScenario('No name')]
-
-        # if type(source).__name__ in ('file','TextOIWrapper'):
-        #     source.close()
