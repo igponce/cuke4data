@@ -58,7 +58,9 @@ class gherkinScenario:
 
 class gherkin:
 
-    scenario_keywords = ['scenario', 'golden', 'golden record',
+    scenario_keywords = ['scenario',
+                         'purpose',
+                         'golden', 'golden record',
                          'transform', 'transformation']
 
     rule_keywords = ['when', 'given', 'since', 'and',
