@@ -7,11 +7,11 @@
 This project contains PoC for using the gherkin language as a cucumber-like
 way to do data manipulation (not just software testing like cucumber does).
 
-
 Possible use cases:
 
 - ETL (triggered by something else)
 - Master Data Management (for rule definition in plain english)
+- Data Quality
 
 # Testing
 
