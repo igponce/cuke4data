@@ -17,8 +17,7 @@ Possible use cases:
 
 Test are in the 'test' directory. To run 'em just do:
 ```{bash}
-cd test
-bash test.sh
+poetry run pytest
 ```
 
 # Roadmap

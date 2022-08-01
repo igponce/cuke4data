@@ -23,11 +23,3 @@ Scope: Invalid user
    Or the user has no telephone
    Then Reject the record
 
-Scope: Check transactions are made by active users
-   Given a purchase record
-   When the transaction date is not older than 3 months
-   And the user last login
-
-
-   Then the user that made the transactionis in the transaction
-   Then mark the user as active
